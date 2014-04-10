@@ -1,0 +1,19 @@
+{
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Casper Bakker",
+            "email": "info@picqer.com"
+        }
+    ],
+    "require": {
+        "league/flysystem": "0.3.*",
+        "picqer/api-client": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "PicqerSync\\": "PicqerSync/"
+        }
+    }
+}
