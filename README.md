@@ -20,6 +20,6 @@ This script is doing the following steps:
 ## How to start
 - Download project
 - Install composer and run `composer install`
-- Create a config.php file, based on the config-dist.php example
+- Create a config.php file, based on the [config-dist.php](https://github.com/picqer/picqer-ftp-syncer/blob/master/config-dist.php) example
 - Make data directory writeable
 - Run app.php and the syncing starts
