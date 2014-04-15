@@ -82,8 +82,11 @@ class InboundsProcessor {
 
     public function parseInboundRule($rule)
     {
-        // "20130206";"Moringa poeder";"30";"31-3-2014 14:04:35";
+        // "20120009";"Acai bessen poeder, biologisch";"1";"10-3-2014 11:06:29";"Retour from order 100010449";
         $fields = explode(';', $rule);
+        if (isset($fields[4]) && (strpos($fields[4], 'Retour') !== false || strpos($fields[4], 'Return') !== false)) {
+            return null;
+        }
         if (isset($fields[0]) && isset($fields[2])) {
             return array(
                 'productcode' => trim($fields[0], '"'),
