@@ -66,6 +66,11 @@ logThis("Process stock updates from FTP");
 $stockLevelsSyncer = new PicqerSync\StockLevelsSyncer($picqerclient, $ftpserver, $config);
 $stockLevelsSyncer->syncStockLevels();
 
+// Let Picqer process the backorders
+logThis("Backorders being processed");
+$backordersProcessor = new PicqerSync\BackordersProcessor($picqerclient);
+$backordersProcessor->processBackorders();
+
 // Save changed data
 $datakeeper->saveData($data);
 
