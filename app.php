@@ -1,6 +1,7 @@
 <?php
 
 ini_set('display_errors', true);
+set_time_limit(600);
 
 require 'config.php';
 require 'vendor/autoload.php';

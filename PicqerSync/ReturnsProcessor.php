@@ -77,22 +77,24 @@ class ReturnsProcessor {
     public function processPicklistReturn($picklistid, $returndata)
     {
         $picklist = $this->getPicklistFromPicklistid($picklistid);
-        $returnorder = array(
-            'idcustomer' => $picklist['data']['idcustomer'],
-            'reference' => 'Return order from picklist ' . $picklist['data']['picklistid'],
-            'products' => array()
-        );
-        foreach ($returndata as $returnrule) {
-            $returnorder['products'][] = array(
-                'idproduct' => $this->getIdproductFromProductcode($returnrule['productcode']),
-                'amount' => 0 - $returnrule['amount'] // Negatief aantal
+        if (isset($picklist['data']['idcustomer']) && !empty($picklist['data']['idcustomer'])) {
+            $returnorder = array(
+                'idcustomer' => $picklist['data']['idcustomer'],
+                'reference' => 'Return order from picklist ' . $picklist['data']['picklistid'],
+                'products' => array()
             );
-        }
-        $neworder = $this->picqerclient->addOrder($returnorder);
-        if ($neworder['success']) {
-            $closedorder = $this->picqerclient->closeOrder($neworder['data']['idorder']);
-            if ($closedorder['success']) {
-                $this->picqerclient->pickallPicklist($closedorder['data']['picklists'][0]['idpicklist']);
+            foreach ($returndata as $returnrule) {
+                $returnorder['products'][] = array(
+                    'idproduct' => $this->getIdproductFromProductcode($returnrule['productcode']),
+                    'amount' => 0 - $returnrule['amount'] // Negatief aantal
+                );
+            }
+            $neworder = $this->picqerclient->addOrder($returnorder);
+            if ($neworder['success']) {
+                $closedorder = $this->picqerclient->closeOrder($neworder['data']['idorder']);
+                if ($closedorder['success']) {
+                    $this->picqerclient->pickallPicklist($closedorder['data']['picklists'][0]['idpicklist']);
+                }
             }
         }
     }
@@ -124,7 +126,7 @@ class ReturnsProcessor {
 
     public function moveReturnFile($filename)
     {
-        $this->ftpserver->rename($this->config['returns-directory'] . '/' . $filename, $this->config['returns-processed-directory'] . '/' . $filename);
+        $this->ftpserver->rename($this->config['returns-directory'] . '/' . $filename, $this->config['returns-processed-directory'] . '/' . $filename . '-' . date('YmdHis') . '-' . rand(1000, 9999));
     }
 
 }

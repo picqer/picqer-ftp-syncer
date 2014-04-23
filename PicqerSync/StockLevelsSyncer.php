@@ -79,7 +79,7 @@ class StockLevelsSyncer {
 
     public function moveStockUpdateFile($filename)
     {
-        $this->ftpserver->rename($this->config['stockupdates-directory'] . '/' . $filename, $this->config['stockupdates-processed-directory'] . '/' . $filename . date('YmdHis') . '-' . rand(100, 999));
+        $this->ftpserver->rename($this->config['stockupdates-directory'] . '/' . $filename, $this->config['stockupdates-processed-directory'] . '/' . $filename . '-' . date('YmdHis') . '-' . rand(1000, 9999));
     }
 
 }

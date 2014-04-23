@@ -97,7 +97,7 @@ class CompletedOrdersProcessor {
 
     public function moveTrackTraceFile($filename)
     {
-        $this->ftpserver->rename($this->config['tracktrace-directory'] . '/' . $filename, $this->config['tracktrace-processed-directory'] . '/' . $filename);
+        $this->ftpserver->rename($this->config['tracktrace-directory'] . '/' . $filename, $this->config['tracktrace-processed-directory'] . '/' . $filename . '-' . date('YmdHis') . '-' . rand(1000, 9999));
     }
 
 }

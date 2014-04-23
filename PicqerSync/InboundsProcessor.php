@@ -124,7 +124,7 @@ class InboundsProcessor {
 
     public function moveInboundFile($filename)
     {
-        $this->ftpserver->rename($this->config['inbounds-directory'] . '/' . $filename, $this->config['inbounds-processed-directory'] . '/' . $filename);
+        $this->ftpserver->rename($this->config['inbounds-directory'] . '/' . $filename, $this->config['inbounds-processed-directory'] . '/' . $filename . '-' . date('YmdHis') . '-' . rand(1000, 9999));
     }
 
 }
