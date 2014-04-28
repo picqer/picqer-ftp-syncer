@@ -12,6 +12,7 @@ function dd($content) {
 }
 
 function logThis($message) {
+	file_put_contents('sync.log', date('Y-m-d H:i:s') . ' - ' . $message . PHP_EOL, FILE_APPEND);
     echo $message . PHP_EOL;
 }
 

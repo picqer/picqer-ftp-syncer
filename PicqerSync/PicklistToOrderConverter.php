@@ -167,7 +167,7 @@ class PicklistToOrderConverter {
             foreach ($orderrule as $field) {
                 $rulecontent[] = '"' . $field . '"';
             }
-            $filecontents .= implode(',', $rulecontent) . PHP_EOL;
+            $filecontents .= implode(';', $rulecontent) . PHP_EOL;
         }
 
         $this->createFileOnFtp($picklist, $filecontents);

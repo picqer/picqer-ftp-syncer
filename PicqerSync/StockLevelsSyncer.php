@@ -68,6 +68,7 @@ class StockLevelsSyncer {
 
     public function processStockUpdateRule($stockupdatedata)
     {
+        logThis('Updating stock for product ' . $stockupdatedata['productcode']);
         $product = $this->picqerclient->getProductByProductcode($stockupdatedata['productcode']);
         if ( ! is_null($product)) {
             $stock = $this->picqerclient->getProductStockForWarehouse($product['data']['idproduct'], $this->config['picqer-idwarehouse']);
