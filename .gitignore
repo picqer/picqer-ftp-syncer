@@ -4,3 +4,4 @@ config.php
 .idea
 .DS_Store
 vendor
+sync.log

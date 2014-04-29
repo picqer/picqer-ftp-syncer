@@ -11,6 +11,11 @@ $config = array(
     'picqer-idshippingprofile' => 1,
     'picqer-idwarehouse' => 1,
 
+    'csv-orderstatus' => '',
+    'csv-purchasedwebsite' => '',
+    'csv-paymentmethod' => '',
+    'csv-shippingmethod' => '',
+
     'orders-directory' => 'PUU_Order',
     'tracktrace-directory' => 'PUU_TTlinkUpdate',
     'tracktrace-processed-directory' => 'PUU_TTlinkUpdate/processed',

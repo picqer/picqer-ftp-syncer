@@ -42,6 +42,10 @@ class PicklistToOrderConverter {
         foreach ($picklists['data'] as $picklist) {
             if ($picklist['status'] == 'new' && !in_array($picklist['idpicklist'], $this->data['picklists'])) {
                 // Not processed picklist
+                $order = $this->picqerclient->getOrder($picklist['idorder']);
+                if ($order['success'] && isset($order['data'])) {
+                    $picklist['order'] = $order['data'];
+                }
                 $toprocesss[] = $picklist;
             }
         }
@@ -101,7 +105,8 @@ class PicklistToOrderConverter {
             'ShippingCity' => 'ShippingCity',
             'ShippingPostcode' => 'ShippingPostcode',
             'ShippingState' => 'ShippingState',
-            'ShippingCountry' => 'ShippingCountry'
+            'ShippingCountry' => 'ShippingCountry',
+            'Reference' => 'Reference'
         ));
 
         foreach ($picklist['products'] as $product) {
@@ -109,7 +114,7 @@ class PicklistToOrderConverter {
             //"18.4000";"";"1.0000";"1.0000";"0.0000";"5488";"gmgvleerbos@home.nl";"anita";"vleerbos";"";"gmgvleerbos@home.nl";"0546-800794";"eskerplein";"159";"almelo";"7603 wh";"-";"NL";"anita";"vleerbos";"";
             //"gmgvleerbos@home.nl";"0546-800794";"eskerplein";"159";"almelo";"7603 wh";"-";"NL";
 
-            $orderrules[] = array(
+            $orderrule = array(
                 'Ordernumber' => $picklist['picklistid'],
                 'Orderdate' => $picklist['created'],
                 'OrderStatus' => $this->config['csv-orderstatus'],
@@ -154,6 +159,12 @@ class PicklistToOrderConverter {
                 'ShippingState' => '',
                 'ShippingCountry' => $picklist['deliverycountry']
             );
+
+            if (isset($picklist['order']['reference'])) {
+                $orderrule['Reference'] = $this->prepareReferece($picklist['order']['reference']);
+            }
+
+            $orderrules[] = $orderrule;
         }
 
         return $orderrules;
@@ -171,6 +182,16 @@ class PicklistToOrderConverter {
         }
 
         $this->createFileOnFtp($picklist, $filecontents);
+    }
+
+    public function prepareReferece($reference)
+    {
+        $hashposition = strpos($reference, '#');
+        if ($hashposition === false) {
+            return $reference;
+        }
+
+        return substr($reference, $hashposition + 1);
     }
 
     public function createFileOnFtp($picklist, $filecontents)
