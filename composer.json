@@ -8,7 +8,7 @@
         }
     ],
     "require": {
-        "league/flysystem": "0.3.*",
+        "league/flysystem": "0.4.*",
         "picqer/api-client": "dev-master"
     },
     "autoload": {
