@@ -76,6 +76,7 @@ class ReturnsProcessor {
 
     public function processPicklistReturn($picklistid, $returndata)
     {
+        logThis('Return for picklist ' . $picklistid);
         $picklist = $this->getPicklistFromPicklistid($picklistid);
         if (isset($picklist['data']['idcustomer']) && !empty($picklist['data']['idcustomer'])) {
             $returnorder = array(
@@ -94,8 +95,13 @@ class ReturnsProcessor {
                 $closedorder = $this->picqerclient->closeOrder($neworder['data']['idorder']);
                 if ($closedorder['success']) {
                     $this->picqerclient->pickallPicklist($closedorder['data']['picklists'][0]['idpicklist']);
+                    logThis('Picklist returned ' . $picklistid);
                 }
+            } else {
+                logThis('Could not create return for picklist ' . $picklistid);
             }
+        } else {
+            logThis('Could find picklist ' . $picklistid . ' to return');
         }
     }
 
@@ -126,6 +132,8 @@ class ReturnsProcessor {
 
     public function moveReturnFile($filename)
     {
+        logThis('Moving ' . $filename);
+        $this->ftpserver->getAdapter()->connect();
         $this->ftpserver->rename($this->config['returns-directory'] . '/' . $filename, $this->config['returns-processed-directory'] . '/' . $filename . '-' . date('YmdHis') . '-' . rand(1000, 9999));
     }
 

@@ -74,12 +74,17 @@ class StockLevelsSyncer {
             $stock = $this->picqerclient->getProductStockForWarehouse($product['data']['idproduct'], $this->config['picqer-idwarehouse']);
             if ($stock['data']['stock'] != $stockupdatedata['stock']) {
                 $this->picqerclient->updateProductStockForWarehouse($product['data']['idproduct'], $this->config['picqer-idwarehouse'], array('amount' => $stockupdatedata['stock'], 'reason' => 'Updated by StockSyncer'));
+                logThis('Product ' . $stockupdatedata['productcode'] . ' stock updated');
             }
+        } else {
+            logThis('Product ' . $stockupdatedata['productcode'] . ' not found');
         }
     }
 
     public function moveStockUpdateFile($filename)
     {
+        logThis('Moving ' . $filename);
+        $this->ftpserver->getAdapter()->connect();
         $this->ftpserver->rename($this->config['stockupdates-directory'] . '/' . $filename, $this->config['stockupdates-processed-directory'] . '/' . $filename . '-' . date('YmdHis') . '-' . rand(1000, 9999));
     }
 

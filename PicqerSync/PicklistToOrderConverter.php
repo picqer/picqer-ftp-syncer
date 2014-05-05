@@ -196,6 +196,8 @@ class PicklistToOrderConverter {
 
     public function createFileOnFtp($picklist, $filecontents)
     {
+        logThis('Creating order for picklist ' . $picklist['idpicklist']);
+        $this->ftpserver->getAdapter()->connect();
         $this->ftpserver->write($this->config['orders-directory'] . '/' . 'order-' . date('Ymd') . '-' . $picklist['idpicklist'] . '.csv', $filecontents);
     }
 

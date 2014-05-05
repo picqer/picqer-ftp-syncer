@@ -49,6 +49,9 @@ class InboundsProcessor {
                     }
                 }
             }
+            logThis('Purchase orders retrieved from Picqer');
+        } else {
+            logThis('Could not get purchase orders');
         }
         $this->purchaseorderProducts = array_reverse($this->purchaseorderProducts, false);
     }
@@ -107,14 +110,18 @@ class InboundsProcessor {
                 } else {
                     $amount = $purchaseorderproduct['amounttoreceive'];
                 }
-                $this->picqerclient->receivePurchaseorderProduct($purchaseorderproduct['idpurchaseorder'], array(
+                $result = $this->picqerclient->receivePurchaseorderProduct($purchaseorderproduct['idpurchaseorder'], array(
                     'idproduct' => $purchaseorderproduct['idproduct'],
                     'amount' => $amount
                 ));
+                if (isset($result['success']) && $result['success']) {
+                    logThis('Product ' . $inbounddata['productcode'] . ' found in purchase order and received');
+                } else {
+                    logThis('Problem with receiving product ' . $inbounddata['productcode']);
+                }
                 $this->purchaseorderProducts[$id]['amountreceived'] += $amount;
                 $this->purchaseorderProducts[$id]['amounttoreceive'] -= $amount;
                 $amountToGo -= $amount;
-                logThis("Inbound product ".$purchaseorderproduct['productcode']." received");
                 if ($amountToGo <= 0) {
                     break;
                 }
@@ -124,6 +131,8 @@ class InboundsProcessor {
 
     public function moveInboundFile($filename)
     {
+        logThis('Moving ' . $filename);
+        $this->ftpserver->getAdapter()->connect();
         $this->ftpserver->rename($this->config['inbounds-directory'] . '/' . $filename, $this->config['inbounds-processed-directory'] . '/' . $filename . '-' . date('YmdHis') . '-' . rand(1000, 9999));
     }
 

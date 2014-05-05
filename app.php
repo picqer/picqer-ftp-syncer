@@ -48,6 +48,9 @@ foreach ($processedPicklists as $processedPicklist) {
     $data['picklists'][] = $processedPicklist;
 }
 
+// Save changed data
+$datakeeper->saveData($data);
+
 // Process picklists who are completed
 logThis("Process track trace from FTP");
 $completedOrdersProcessor = new PicqerSync\CompletedOrdersProcessor($picqerclient, $ftpserver, $config);
@@ -72,8 +75,5 @@ $stockLevelsSyncer->syncStockLevels();
 logThis("Backorders being processed");
 $backordersProcessor = new PicqerSync\BackordersProcessor($picqerclient);
 $backordersProcessor->processBackorders();
-
-// Save changed data
-$datakeeper->saveData($data);
 
 echo 'DONE';

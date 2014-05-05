@@ -12,7 +12,9 @@ class BackordersProcessor {
 
     public function processBackorders()
     {
+        logThis('Processing backorders');
         $this->picqerclient->processBackorders();
+        logThis('Backorders processed');
     }
 
 }
